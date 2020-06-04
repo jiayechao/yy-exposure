@@ -1,12 +1,11 @@
 {
-  "name": "exposure",
-  "version": "1.0.0",
-  "description": "曝光埋点",
+  "name": "yy-exposure",
+  "version": "1.1.0",
+  "description": "一个用来监测元素是否在可视范围内的插件",
   "main": "index.js",
   "scripts": {
     "dev": "webpack --watch",
-    "build": "tsc --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
@@ -17,7 +16,6 @@
     "webpack-cli": "^3.3.11"
   },
   "devDependencies": {
-    "ts-loader": "^7.0.5",
     "typescript": "^3.9.3"
   }
 }

@@ -27,7 +27,6 @@ module.exports = class Exposure {
                     // 触发事件
                     const chooseHandle = this.observerHandles.filter(observerHandle => observerHandle.el === target)
                     chooseHandle[0].visibleHandle(item)
-                    // target.hiddenHandle(item)
                     // 只触发一次
                     observerConfig.one && observer!.unobserve(target);
                   }
@@ -52,11 +51,12 @@ module.exports = class Exposure {
   }
 
 	// 添加曝光元素
-  public add(el: Element, cb: Function, ...rest: (string|number)[]) {
+  public add(el: Element, cb: Function, ...rest: any[]) {
     
     const visibleItemInstance = (function() {
       return function(observeInstance: IntersectionObserverEntry): any {
-        return cb.call(null, ...rest, observeInstance)
+        rest.push(observeInstance)
+        return cb.apply(null, rest)
       }
     }())
     this.observerHandles.push({
