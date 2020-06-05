@@ -6,6 +6,7 @@ module.exports = /** @class */ (function () {
     }
     Exposure.prototype.init = function (observerConfig) {
         var _this = this;
+        console.log(observerConfig);
         this.observer = new IntersectionObserver(function (entries, observer) {
             entries.forEach(function (item) {
                 var target = item.target;
@@ -41,8 +42,10 @@ module.exports = /** @class */ (function () {
         for (var _i = 2; _i < arguments.length; _i++) {
             rest[_i - 2] = arguments[_i];
         }
+        rest.push(null); // 给一个占位参数
         var visibleItemInstance = (function () {
             return function (observeInstance) {
+                rest.pop();
                 rest.push(observeInstance);
                 return cb.apply(null, rest);
             };

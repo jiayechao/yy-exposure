@@ -18,6 +18,7 @@ module.exports = class Exposure {
   }
 
   private init(observerConfig: ObserverConfig) {
+    console.log(observerConfig)
       this.observer = new IntersectionObserver(
           (entries, observer: IntersectionObserver) => {
               entries.forEach(item => {
@@ -52,9 +53,10 @@ module.exports = class Exposure {
 
 	// 添加曝光元素
   public add(el: Element, cb: Function, ...rest: any[]) {
-    
+    rest.push(null) // 给一个占位参数
     const visibleItemInstance = (function() {
       return function(observeInstance: IntersectionObserverEntry): any {
+        rest.pop()
         rest.push(observeInstance)
         return cb.apply(null, rest)
       }

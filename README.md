@@ -23,7 +23,7 @@ const ExposureInstance = new Exposure(observerConfig)
 observerConfig {
   visivleRatio: number | number[] // 监听范围，可以传0-1的数字，或数组，表示曝光面积所占比例
   root?: HTMLElement // 不传就是以视窗为参照，或者有设置了overflow：scroll|auto的祖先元素
-  rootMargin?: string // 距离root的距离，类似于margin，单位为'px',，表示距离root多少就算重叠
+  rootMargin?: string // 距离root的距离，类似于margin，单位为'px',，表示距离root多少就算重叠。 注意：即使是0，也要带单位
   hiddenEmmit?: boolean // 监听元素隐藏而不是曝光
   one?: Boolean // 是否只需要监听一次，常用在懒加载
 }

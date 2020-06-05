@@ -1,5 +1,5 @@
 
-import Exposure from '../lib/exposure'
+import Exposure from '../../lib/exposure'
 
 const exposureSingleTon =  new Exposure({
   visivleRatio: 0.5,

@@ -18,7 +18,7 @@
             overflow: hidden;
         }
 
-        .myDiv {
+        .myDiv, .myLazyImg {
             margin-top: 50px;
             width: 50px;
             height: 50px;
@@ -32,15 +32,10 @@
         <div id="div2">
             <div class="myDiv">1</div>
             <div class="myDiv">2</div>
-            <div class="myDiv">3</div>
-            <div class="myDiv">4</div>
-            <div class="myDiv">5</div>
-            <div class="myDiv">6</div>
-            <div class="myDiv">7</div>
-            <div class="myDiv">8</div>
+            <img class="myLazyImg" data-src="./previewcourse.png" alt="">
         </div>
     </div>
-    <script src="../dist/main.js"></script>
+    <script src="../../dist/lazyload.js"></script>
 </body>
 
 </html>
