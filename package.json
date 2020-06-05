@@ -1,11 +1,11 @@
 {
   "name": "yy-exposure",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "一个用来监测元素是否在可视范围内的插件",
-  "main": "./dist/index.js",
+  "main": "./dist/exposure.js",
   "scripts": {
-    "dev": "webpack --watch",
-    "build": "webpack"
+    "dev": "tsc --watch && webpack --watch",
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",

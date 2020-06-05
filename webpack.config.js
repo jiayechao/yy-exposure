@@ -1,10 +1,7 @@
 const path = require('path')
 module.exports = {
   mode: 'production',
-  entry: {
-    index: './lib/exposure.ts',
-    example: './example/index.js'
-  },
+  entry: './example/index.js',
   output: {
     path: path.resolve(__dirname, 'dist')
   },
