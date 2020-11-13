@@ -32,7 +32,7 @@ module.exports = /** @class */ (function () {
                 else {
                     // 从未出现在视口内
                     if (!chooseTarget.hasExposure) {
-                        return { value: void 0 };
+                        return "continue";
                     }
                     // 曝光时间
                     item.exposureTime = item.time - chooseTarget.startExposureTime;
@@ -42,9 +42,7 @@ module.exports = /** @class */ (function () {
                 }
             };
             for (var i = 0; i < len; i++) {
-                var state_1 = _loop_1(i);
-                if (typeof state_1 === "object")
-                    return state_1.value;
+                _loop_1(i);
             }
             ;
         }, {

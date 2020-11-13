@@ -1,6 +1,6 @@
 {
   "name": "yy-exposure",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "一个用来监测元素是否在可视范围内的插件",
   "main": "./dist/exposure.js",
   "scripts": {

@@ -60,7 +60,7 @@ module.exports = class Exposure {
             } else {
                 // 从未出现在视口内
               if(!chooseTarget.hasExposure) {
-                return
+                continue
               }
               // 曝光时间
               item.exposureTime = item.time - chooseTarget.startExposureTime
