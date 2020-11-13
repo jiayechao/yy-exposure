@@ -1,6 +1,7 @@
 require('intersection-observer');
 module.exports = /** @class */ (function () {
     function Exposure(observerConfig) {
+        // 曝光操作回调
         this.observerHandles = [];
         this.init(observerConfig);
     }
@@ -8,28 +9,44 @@ module.exports = /** @class */ (function () {
         var _this = this;
         console.log(observerConfig);
         this.observer = new IntersectionObserver(function (entries, observer) {
-            entries.forEach(function (item) {
+            var len = entries.length;
+            var _loop_1 = function (i) {
+                var item = entries[i];
+                // 目标元素
                 var target = item.target;
-                if (observerConfig.hiddenEmmit) {
-                    if (!item.isIntersecting) {
-                        // 触发事件
-                        var chooseHandle = _this.observerHandles.filter(function (observerHandle) { return observerHandle.el === target; });
-                        chooseHandle[0].visibleHandle(item);
-                        // 只触发一次
-                        observerConfig.one && observer.unobserve(target);
-                    }
+                // 回调对象
+                var chooseTarget = _this.observerHandles.filter(function (observerHandle) { return observerHandle.el === target; })[0];
+                // 出现在视口内
+                if (item.isIntersecting) {
+                    // 曝光标记
+                    chooseTarget.hasExposure = true;
+                    chooseTarget.startExposureTime = item.time;
+                    // 曝光次数增加
+                    chooseTarget.visibleTimes += 1;
+                    item.visibleTimes = chooseTarget.visibleTimes;
+                    // 执行回调函数
+                    chooseTarget.visibleHandle(item);
+                    // 只触发一次，不在监听
+                    observerConfig.one && observer.unobserve(target);
                 }
                 else {
-                    // 曝光，需要触发曝光函数
-                    if (item.isIntersecting) {
-                        // 触发事件
-                        var chooseHandle = _this.observerHandles.filter(function (observerHandle) { return observerHandle.el === target; });
-                        chooseHandle[0].visibleHandle(item);
-                        // 只触发一次
-                        observerConfig.one && observer.unobserve(target);
+                    // 从未出现在视口内
+                    if (!chooseTarget.hasExposure) {
+                        return { value: void 0 };
                     }
+                    // 曝光时间
+                    item.exposureTime = item.time - chooseTarget.startExposureTime;
+                    typeof chooseTarget.hideHandle === 'function' && chooseTarget.hideHandle(item);
+                    // 只触发一次
+                    observerConfig.one && observer.unobserve(target);
                 }
-            });
+            };
+            for (var i = 0; i < len; i++) {
+                var state_1 = _loop_1(i);
+                if (typeof state_1 === "object")
+                    return state_1.value;
+            }
+            ;
         }, {
             root: observerConfig.root || null,
             rootMargin: observerConfig.rootMargin,
@@ -37,25 +54,38 @@ module.exports = /** @class */ (function () {
         });
     };
     // 添加曝光元素
-    Exposure.prototype.add = function (el, cb) {
-        var rest = [];
-        for (var _i = 2; _i < arguments.length; _i++) {
-            rest[_i - 2] = arguments[_i];
+    Exposure.prototype.add = function (el, showCb, hideCb) {
+        if (typeof showCb !== 'function') {
+            throw new Error('曝光回调函数必须存在！');
         }
-        rest.push(null); // 给一个占位参数
+        // 曝光回调
         var visibleItemInstance = (function () {
             return function (observeInstance) {
-                rest.pop();
-                rest.push(observeInstance);
-                return cb.apply(null, rest);
+                return showCb.call(null, observeInstance);
             };
         }());
-        this.observerHandles.push({
+        var handleObj = {
             el: el,
-            visibleHandle: visibleItemInstance
-        });
+            visibleTimes: 0,
+            hasExposure: false,
+            startExposureTime: 0,
+            exposureTime: 0,
+            visibleHandle: visibleItemInstance,
+        };
+        // 隐藏回调
+        var hideItemInstance = null;
+        if (typeof hideCb === 'function') {
+            hideItemInstance = (function () {
+                return function (observeInstance) {
+                    return hideCb.call(null, observeInstance);
+                };
+            }());
+        }
+        handleObj.hideHandle = hideItemInstance;
+        // 加入回调函数队列
+        this.observerHandles.push(handleObj);
+        // 监视元素
         this.observer && this.observer.observe(el);
-        return this.observer;
     };
     // 去掉观察
     Exposure.prototype.disconnect = function () {

@@ -24,7 +24,6 @@ observerConfig {
   visivleRatio: number | number[] // 监听范围，可以传0-1的数字，或数组，表示曝光面积所占比例
   root?: HTMLElement // 不传就是以视窗为参照，或者有设置了overflow：scroll|auto的祖先元素
   rootMargin?: string // 距离root的距离，类似于margin，单位为'px',，表示距离root多少就算重叠。 注意：即使是0，也要带单位
-  hiddenEmmit?: boolean // 监听元素隐藏而不是曝光
   one?: Boolean // 是否只需要监听一次，常用在懒加载
 }
 ```
@@ -32,13 +31,34 @@ observerConfig {
 
 ##### 添加监听元素和回调
 ```js
-ExposureInstance.add(el, function() {
-  // arguments包含了回调函数后面的参数，最后一个参数返回监听元素的入口实例IntersectionObserverEntry
-  console.log(arguments)
-}, 1,2,3)
+/*
+@param {Element} el  - 监听元素.
+@param {Function} fn  - 曝光回调.
+@param {Function} fn  - 隐藏回调.
+*/
+ExposureInstance.add(el, function(item) {
+  // 参数返回监听元素的入口实例IntersectionObserverEntry
+  /*
+    曝光回调的item中加入了曝光次数visibleTimes
+  */
+  console.log('曝光', item)
+}, function(item) {
+  // 参数返回监听元素的入口实例IntersectionObserverEntry
+  /*
+    隐藏回调的item中加入了曝光时间exposureTime
+  */
+  console.log('隐藏', item)
+})
 ```
 
 ##### 取消监听
 ```js
 ExposureInstance.disconnect()
 ```
+
+#### 实战应用
+1. 图片懒加载
+2. 组件懒加载
+3. 模块曝光
+4. 模块曝光时间
+5. 模块曝光次数
